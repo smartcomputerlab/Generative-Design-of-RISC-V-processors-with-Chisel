@@ -1,0 +1,96 @@
+{
+  "creator": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+  "modules": {
+    "MyModule": {
+      "attributes": {
+        "top": "00000000000000000000000000000001",
+        "src": "generated/MyModule.v:1.1-9.10"
+      },
+      "ports": {
+        "clock": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "reset": {
+          "direction": "input",
+          "bits": [ 3 ]
+        },
+        "io_a": {
+          "direction": "input",
+          "bits": [ 4, 5, 6, 7, 8, 9, 10, 11 ]
+        },
+        "io_b": {
+          "direction": "input",
+          "bits": [ 12, 13, 14, 15, 16, 17, 18, 19 ]
+        },
+        "io_y": {
+          "direction": "output",
+          "bits": [ 20, 21, 22, 23, 24, 25, 26, 27 ]
+        }
+      },
+      "cells": {
+        "$add$generated/MyModule.v:8$1": {
+          "hide_name": 1,
+          "type": "$add",
+          "parameters": {
+            "A_SIGNED": "00000000000000000000000000000000",
+            "A_WIDTH": "00000000000000000000000000001000",
+            "B_SIGNED": "00000000000000000000000000000000",
+            "B_WIDTH": "00000000000000000000000000001000",
+            "Y_WIDTH": "00000000000000000000000000001000"
+          },
+          "attributes": {
+            "src": "generated/MyModule.v:8.17-8.28"
+          },
+          "port_directions": {
+            "A": "input",
+            "B": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 4, 5, 6, 7, 8, 9, 10, 11 ],
+            "B": [ 12, 13, 14, 15, 16, 17, 18, 19 ],
+            "Y": [ 20, 21, 22, 23, 24, 25, 26, 27 ]
+          }
+        }
+      },
+      "netnames": {
+        "clock": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "generated/MyModule.v:2.16-2.21"
+          }
+        },
+        "io_a": {
+          "hide_name": 0,
+          "bits": [ 4, 5, 6, 7, 8, 9, 10, 11 ],
+          "attributes": {
+            "src": "generated/MyModule.v:4.16-4.20"
+          }
+        },
+        "io_b": {
+          "hide_name": 0,
+          "bits": [ 12, 13, 14, 15, 16, 17, 18, 19 ],
+          "attributes": {
+            "src": "generated/MyModule.v:5.16-5.20"
+          }
+        },
+        "io_y": {
+          "hide_name": 0,
+          "bits": [ 20, 21, 22, 23, 24, 25, 26, 27 ],
+          "attributes": {
+            "src": "generated/MyModule.v:6.16-6.20"
+          }
+        },
+        "reset": {
+          "hide_name": 0,
+          "bits": [ 3 ],
+          "attributes": {
+            "src": "generated/MyModule.v:3.16-3.21"
+          }
+        }
+      }
+    }
+  }
+}

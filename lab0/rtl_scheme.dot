@@ -1,0 +1,14 @@
+digraph "MyModule" {
+label="MyModule";
+rankdir="LR";
+remincross=true;
+n1 [ shape=octagon, label="clock", color="black", fontcolor="black"];
+n2 [ shape=octagon, label="io_a", color="black", fontcolor="black"];
+n3 [ shape=octagon, label="io_b", color="black", fontcolor="black"];
+n4 [ shape=octagon, label="io_y", color="black", fontcolor="black"];
+n5 [ shape=octagon, label="reset", color="black", fontcolor="black"];
+c9 [ shape=record, label="{{<p6> A|<p7> B}|$1\n$add|{<p8> Y}}",  ];
+n2:e -> c9:p6:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+n3:e -> c9:p7:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+c9:p8:e -> n4:w [color="black", fontcolor="black", style="setlinewidth(3)", label=""];
+}
