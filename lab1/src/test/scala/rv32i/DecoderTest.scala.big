@@ -1,0 +1,47 @@
+package rv32i
+
+import chisel3._
+import chiseltest._
+import org.scalatest.flatspec.AnyFlatSpec
+
+class DecoderTest extends AnyFlatSpec with ChiselScalatestTester {
+
+  behavior of "Decoder"
+
+  it should "decode R-type instructions" in {
+    test(new Decoder)
+      .withAnnotations(Seq(WriteVcdAnnotation)) { dut =>
+
+        def check(
+          instr: BigInt,
+          rs1: Int,
+          rs2: Int,
+          rd: Int,
+          op: UInt
+        ): Unit = {
+          dut.io.instr.poke(instr.U)
+
+          dut.io.rs1.expect(rs1.U)
+          dut.io.rs2.expect(rs2.U)
+          dut.io.rd.expect(rd.U)
+          dut.io.aluOp.expect(op)
+          dut.io.regWrite.expect(true.B)
+          dut.io.valid.expect(true.B)
+
+          dut.clock.step()
+        }
+
+        check(RV32IEncoding.add (3,  1,  2),  1,  2,  3,  ALUOp.ADD)
+        check(RV32IEncoding.sub (4,  2,  5),  2,  5,  4,  ALUOp.SUB)
+        check(RV32IEncoding.sll (5,  3,  6),  3,  6,  5,  ALUOp.SLL)
+        check(RV32IEncoding.slt (6,  4,  7),  4,  7,  6,  ALUOp.SLT)
+        check(RV32IEncoding.sltu(7,  5,  8),  5,  8,  7,  ALUOp.SLTU)
+        check(RV32IEncoding.xor (8,  6,  9),  6,  9,  8,  ALUOp.XOR)
+        check(RV32IEncoding.srl (9,  7, 10),  7, 10,  9,  ALUOp.SRL)
+        check(RV32IEncoding.sra (10, 8, 11),  8, 11, 10,  ALUOp.SRA)
+        check(RV32IEncoding.or  (11, 9, 12),  9, 12, 11,  ALUOp.OR)
+        check(RV32IEncoding.and (12,10, 13), 10, 13, 12,  ALUOp.AND)
+      }
+  }
+}
+
