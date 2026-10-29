@@ -1,0 +1,130 @@
+package rv32i
+
+object RV32IEncoding {
+
+  private val OP     = BigInt(0x33)
+  private val OP_IMM = BigInt(0x13)
+
+  // ------------------------------------------------------------
+  // R-type
+  // ------------------------------------------------------------
+
+  private def encodeR(
+    rd: Int,
+    rs1: Int,
+    rs2: Int,
+    funct3: Int,
+    funct7: Int
+  ): BigInt = {
+
+    ((BigInt(funct7) & 0x7f) << 25) |
+    ((BigInt(rs2)    & 0x1f) << 20) |
+    ((BigInt(rs1)    & 0x1f) << 15) |
+    ((BigInt(funct3) & 0x07) << 12) |
+    ((BigInt(rd)     & 0x1f) << 7)  |
+    OP
+  }
+
+  // ------------------------------------------------------------
+  // I-type
+  // ------------------------------------------------------------
+
+  private def encodeI(
+    rd: Int,
+    rs1: Int,
+    imm: Int,
+    funct3: Int
+  ): BigInt = {
+
+    ((BigInt(imm)    & 0xfff) << 20) |
+    ((BigInt(rs1)    & 0x1f) << 15) |
+    ((BigInt(funct3) & 0x07) << 12) |
+    ((BigInt(rd)     & 0x1f) << 7)  |
+    OP_IMM
+  }
+
+  // ============================================================
+  // R-type instructions
+  // ============================================================
+
+  def add(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x0, 0x00)
+
+  def sub(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x0, 0x20)
+
+  def sll(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x1, 0x00)
+
+  def slt(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x2, 0x00)
+
+  def sltu(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x3, 0x00)
+
+  def xor(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x4, 0x00)
+
+  def srl(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x5, 0x00)
+
+  def sra(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x5, 0x20)
+
+  def or(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x6, 0x00)
+
+  def and(rd: Int, rs1: Int, rs2: Int): BigInt =
+    encodeR(rd, rs1, rs2, 0x7, 0x00)
+
+  // ============================================================
+  // I-type arithmetic / logical instructions
+  // ============================================================
+
+  def addi(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x0)
+
+  def slti(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x2)
+
+  def sltiu(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x3)
+
+  def xori(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x4)
+
+  def ori(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x6)
+
+  def andi(rd: Int, rs1: Int, imm: Int): BigInt =
+    encodeI(rd, rs1, imm, 0x7)
+
+  // ============================================================
+  // Shift-immediate instructions
+  // ============================================================
+
+  def slli(rd: Int, rs1: Int, shamt: Int): BigInt =
+    encodeI(
+      rd,
+      rs1,
+      shamt & 0x1f,
+      0x1
+    )
+
+  def srli(rd: Int, rs1: Int, shamt: Int): BigInt =
+    encodeI(
+      rd,
+      rs1,
+      shamt & 0x1f,
+      0x5
+    )
+
+  def srai(rd: Int, rs1: Int, shamt: Int): BigInt =
+    encodeI(
+      rd,
+      rs1,
+      (0x20 << 5) | (shamt & 0x1f),
+      0x5
+    )
+}
+

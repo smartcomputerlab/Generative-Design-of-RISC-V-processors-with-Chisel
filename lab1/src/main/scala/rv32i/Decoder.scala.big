@@ -1,0 +1,40 @@
+package rv32i
+import chisel3._
+import chisel3.util._
+
+class Decoder extends Module {
+  val io = IO(new Bundle {
+    val instr    = Input(UInt(32.W))
+    val rs1      = Output(UInt(5.W))
+    val rs2      = Output(UInt(5.W))
+    val rd       = Output(UInt(5.W))
+    val aluOp    = Output(UInt(ALUOp.width.W))
+    val regWrite = Output(Bool())
+    val valid    = Output(Bool())
+  })
+  val opcode = io.instr(6, 0)
+  val funct3 = io.instr(14, 12)
+  val funct7 = io.instr(31, 25)
+  val funct  = Cat(funct7, funct3)
+  io.rs1 := io.instr(19, 15)
+  io.rs2 := io.instr(24, 20)
+  io.rd  := io.instr(11, 7)
+  io.aluOp := ALUOp.NOP
+  io.valid := false.B
+  when (opcode === "b0110011".U) {
+    switch (funct) {
+      is ("b0000000000".U) { io.aluOp := ALUOp.ADD;  io.valid := true.B }
+      is ("b0100000000".U) { io.aluOp := ALUOp.SUB;  io.valid := true.B }
+      is ("b0000000001".U) { io.aluOp := ALUOp.SLL;  io.valid := true.B }
+      is ("b0000000010".U) { io.aluOp := ALUOp.SLT;  io.valid := true.B }
+      is ("b0000000011".U) { io.aluOp := ALUOp.SLTU; io.valid := true.B }
+      is ("b0000000100".U) { io.aluOp := ALUOp.XOR;  io.valid := true.B }
+      is ("b0000000101".U) { io.aluOp := ALUOp.SRL;  io.valid := true.B }
+      is ("b0100000101".U) { io.aluOp := ALUOp.SRA;  io.valid := true.B }
+      is ("b0000000110".U) { io.aluOp := ALUOp.OR;   io.valid := true.B }
+      is ("b0000000111".U) { io.aluOp := ALUOp.AND;  io.valid := true.B }
+    }
+  }
+  io.regWrite := io.valid
+}
+
